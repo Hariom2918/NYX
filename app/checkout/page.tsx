@@ -98,17 +98,6 @@ export default function CheckoutPage() {
       {/* Background decoration */}
       <AuroraBackground showRadialGradient={false} className="absolute inset-0 z-0 h-full w-full fixed" />
 
-      <Loader loadingStates={loadingStates} loading={loading} duration={1500} loop={true} />
-
-      {loading && (
-        <button
-          className="fixed top-6 right-6 text-white z-[120] p-3 bg-white/20 backdrop-blur-xl rounded-full border border-white/40 hover:bg-white/30 transition-colors shadow-lg"
-          onClick={() => setLoading(false)}
-        >
-          <IconSquareRoundedX className="h-6 w-6" />
-        </button>
-      )}
-
       <div className="w-full max-w-md bg-white/40 backdrop-blur-3xl border border-white/60 rounded-3xl p-8 shadow-2xl relative z-10">
         <div className="mb-8 text-center">
           <h2 className="text-sm font-bold tracking-widest uppercase text-slate-700 mb-2 drop-shadow-sm">Secure Checkout</h2>
