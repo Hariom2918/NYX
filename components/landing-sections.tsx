@@ -95,7 +95,7 @@ export function ExperienceSection() {
   const cards = [
     { title: "LIVE MUSIC", desc: "Immersive soundscapes.", img: "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=800&auto=format&fit=crop" },
     { title: "THE CROWD", desc: "Shared, vibrant energy.", img: "https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?q=80&w=800&auto=format&fit=crop" },
-    { title: "PREMIUM VIBES", desc: "Curated mixology & arts.", img: "https://images.unsplash.com/photo-1470229722913-7c092dbbba3a?q=80&w=800&auto=format&fit=crop" },
+    { title: "PREMIUM VIBES", desc: "Curated mixology & arts.", img: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=800&auto=format&fit=crop&v=2" },
     { title: "VIP LOUNGE", desc: "Exclusive access areas.", img: "https://images.unsplash.com/photo-1566737236500-c8ac43014a67?q=80&w=800&auto=format&fit=crop" },
     { title: "LIGHT SHOWS", desc: "Visual storytelling.", img: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=800&auto=format&fit=crop" },
   ];
