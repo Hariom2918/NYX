@@ -63,7 +63,9 @@ export default function TicketSelection({ ticketTypes, eventId }: TicketSelectio
           const isSoldOut = available <= 0;
           const currentQty = selected[type.id] || 0;
           const isActive = currentQty > 0;
-          const isFeatured = type.name.toUpperCase() === 'VIP';
+          const isVVIP = type.name.toUpperCase().includes('VVIP');
+          const isVIP = type.name.toUpperCase().includes('VIP') && !isVVIP;
+          const isGeneral = !isVIP && !isVVIP;
 
           return (
             <motion.div
@@ -75,38 +77,56 @@ export default function TicketSelection({ ticketTypes, eventId }: TicketSelectio
               transition={{ duration: 0.2 }}
               className={`relative p-6 md:p-8 rounded-3xl border transition-all duration-300 overflow-hidden backdrop-blur-xl shadow-2xl
                 ${isSoldOut ? 'border-white/10 bg-white/10 opacity-60' : ''}
-                ${!isSoldOut && !isActive && !isFeatured ? 'border-white/40 bg-white/30 hover:bg-white/40' : ''}
-                ${!isSoldOut && !isActive && isFeatured ? 'border-orange-300/50 bg-gradient-to-br from-orange-400/20 to-pink-500/10 hover:border-orange-300' : ''}
-                ${isActive ? 'border-orange-400 bg-white/60 shadow-[0_0_40px_rgba(255,255,255,0.4)]' : ''}
+                ${!isSoldOut && !isActive && isGeneral ? 'border-white/40 bg-white/30 hover:bg-white/40' : ''}
+                ${!isSoldOut && !isActive && isVIP ? 'border-orange-300/50 bg-gradient-to-br from-orange-400/20 to-pink-500/10 hover:border-orange-300' : ''}
+                ${!isSoldOut && !isActive && isVVIP ? 'border-orange-500/40 bg-slate-900 shadow-[0_20px_50px_rgba(0,0,0,0.3)] hover:border-orange-400' : ''}
+                ${isActive && !isVVIP ? 'border-orange-400 bg-white/60 shadow-[0_0_40px_rgba(255,255,255,0.4)]' : ''}
+                ${isActive && isVVIP ? 'border-orange-400 bg-slate-800 shadow-[0_0_40px_rgba(249,115,22,0.4)]' : ''}
               `}
               onClick={() => {
                 if (!isSoldOut && currentQty === 0) handleSelect(type.id, 1);
               }}
             >
-              <div className="relative z-10 flex flex-col md:flex-row md:items-start justify-between gap-6 text-slate-900">
+              <div className={`relative z-10 flex flex-col md:flex-row md:items-start justify-between gap-6 ${isVVIP ? 'text-white' : 'text-slate-900'}`}>
                 <div className="flex-1 cursor-pointer">
-                  <div className="flex items-center gap-3 mb-2">
+                  <div className="flex items-center flex-wrap gap-3 mb-2">
                     <h3 className="text-2xl font-bold tracking-tight drop-shadow-sm">{type.name}</h3>
-                    {isFeatured && (
+                    {isVIP && (
                       <span className="px-3 py-1 rounded-full bg-slate-900 text-orange-400 text-[10px] font-black uppercase tracking-widest shadow-lg">
                         Recommended
                       </span>
                     )}
+                    {isVVIP && (
+                      <span className="px-3 py-1 rounded-full bg-orange-500 text-white text-[10px] font-black uppercase tracking-widest shadow-lg">
+                        Extremely Limited
+                      </span>
+                    )}
                   </div>
-                  <p className="text-3xl font-light mb-4 drop-shadow-sm">{formatCurrency(type.price)}</p>
+                  <p className={`text-3xl font-light mb-4 drop-shadow-sm ${isVVIP ? 'text-orange-400 font-medium' : ''}`}>{formatCurrency(type.price)}</p>
                   
-                  <ul className="space-y-2 text-sm text-slate-800 mb-6 font-medium">
-                    <li className="flex items-center gap-2"><CheckIcon /> Entry to the event</li>
-                    <li className="flex items-center gap-2"><CheckIcon /> {isFeatured ? 'Priority fast-track access' : 'General access areas'}</li>
-                    {isFeatured && <li className="flex items-center gap-2"><CheckIcon /> Exclusive lounge access</li>}
+                  <ul className={`space-y-2 text-sm mb-6 font-medium ${isVVIP ? 'text-slate-300' : 'text-slate-800'}`}>
+                    {isVVIP ? (
+                      <>
+                        <li className="flex items-start gap-2 font-bold text-white"><CheckIcon /> Access to Exclusive VVIP Lounge</li>
+                        <li className="flex items-start gap-2 font-bold text-white"><CheckIcon /> Skip-the-line Dedicated Entry Lane</li>
+                        <li className="flex items-start gap-2"><CheckIcon /> Complimentary premium welcome drinks</li>
+                        <li className="flex items-start gap-2"><CheckIcon /> Priority bar service & dedicated concierge</li>
+                      </>
+                    ) : (
+                      <>
+                        <li className="flex items-center gap-2"><CheckIcon /> Entry to the event</li>
+                        <li className="flex items-center gap-2"><CheckIcon /> {isVIP ? 'Priority fast-track access' : 'General access areas'}</li>
+                        {isVIP && <li className="flex items-center gap-2"><CheckIcon /> Exclusive VIP bar access</li>}
+                      </>
+                    )}
                   </ul>
 
                   <p className="text-xs font-bold uppercase tracking-widest">
                     {isSoldOut ? (
-                      <span className="text-red-600">Sold Out</span>
+                      <span className="text-red-500">Sold Out</span>
                     ) : (
-                      <span className={available < 20 ? "text-orange-600" : "text-slate-700"}>
-                        {available < 20 ? `Only ${available} left` : 'Available'}
+                      <span className={isVVIP ? "text-orange-400" : (available < 20 ? "text-orange-600" : "text-slate-700")}>
+                        {isVVIP ? `${available} of ${type.quantity_total} VVIP left` : (available < 20 ? `Only ${available} left` : 'Available')}
                       </span>
                     )}
                   </p>
