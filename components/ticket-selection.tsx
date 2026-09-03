@@ -142,9 +142,11 @@ export default function TicketSelection({ ticketTypes, eventId }: TicketSelectio
                           exit={{ opacity: 0, scale: 0.9 }}
                           onClick={() => handleSelect(type.id, 1)}
                           className={`w-full py-3 px-6 rounded-xl font-bold text-sm transition-all shadow-lg
-                            ${isFeatured 
-                              ? 'bg-slate-900 text-white hover:bg-slate-800' 
-                              : 'bg-white/60 text-slate-900 hover:bg-white border border-white/60'}`}
+                            ${isVVIP 
+                              ? 'bg-orange-500 text-white hover:bg-orange-600'
+                              : isVIP
+                                ? 'bg-slate-900 text-white hover:bg-slate-800' 
+                                : 'bg-white/60 text-slate-900 hover:bg-white border border-white/60'}`}
                         >
                           SELECT
                         </motion.button>
