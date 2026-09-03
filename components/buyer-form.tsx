@@ -14,22 +14,54 @@ interface BuyerFormProps {
 export default function BuyerForm({ eventId, selectedTickets, totalAmount, onBack }: BuyerFormProps) {
   const router = useRouter();
   const [formData, setFormData] = useState({ name: "", email: "", phone: "" });
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const { name, email, phone } = formData;
+
+  const validate = () => {
+    const newErrors: Record<string, string> = {};
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim();
+    const trimmedPhone = phone.trim();
+    
+    if (!trimmedName || trimmedName.length < 2) {
+      newErrors.name = 'Please enter your full name (at least 2 characters).';
+    }
+    if (!trimmedEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
+      newErrors.email = 'Please enter a valid email address.';
+    }
+    const digits = trimmedPhone.replace(/[^0-9]/g, '');
+    if (!digits || digits.length < 10) {
+      newErrors.phone = 'Please enter a valid phone number (at least 10 digits).';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // In a real app we'd validate phone formatting robustly here
-    // Save order info to session storage so checkout page can read it
-    const orderData = { 
-      eventId, 
-      selectedTickets, 
-      totalAmount, 
-      buyer: formData 
-    };
-    sessionStorage.setItem("nyx_pending_order", JSON.stringify(orderData));
-    
-    // Navigate to checkout phase
-    router.push("/checkout");
+    if (!validate()) return;
+    setLoading(true);
+
+    try {
+      // In a real app we'd validate phone formatting robustly here
+      // Save order info to session storage so checkout page can read it
+      const orderData = { 
+        eventId, 
+        selectedTickets, 
+        totalAmount, 
+        buyer: formData 
+      };
+      sessionStorage.setItem("nyx_pending_order", JSON.stringify(orderData));
+      
+      // Navigate to checkout phase
+      router.push("/checkout");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -59,6 +91,7 @@ export default function BuyerForm({ eventId, selectedTickets, totalAmount, onBac
             value={formData.name}
             onChange={e => setFormData({...formData, name: e.target.value})}
           />
+          {errors.name && <p className="text-red-500 text-xs mt-1 font-medium">{errors.name}</p>}
         </div>
         
         <div className="space-y-2">
@@ -71,6 +104,7 @@ export default function BuyerForm({ eventId, selectedTickets, totalAmount, onBac
             value={formData.email}
             onChange={e => setFormData({...formData, email: e.target.value})}
           />
+          {errors.email && <p className="text-red-500 text-xs mt-1 font-medium">{errors.email}</p>}
         </div>
 
         <div className="space-y-2">
@@ -83,6 +117,7 @@ export default function BuyerForm({ eventId, selectedTickets, totalAmount, onBac
             value={formData.phone}
             onChange={e => setFormData({...formData, phone: e.target.value})}
           />
+          {errors.phone && <p className="text-red-500 text-xs mt-1 font-medium">{errors.phone}</p>}
         </div>
 
         <div className="pt-6 border-t border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-6 mt-8">
@@ -93,9 +128,10 @@ export default function BuyerForm({ eventId, selectedTickets, totalAmount, onBac
           
           <button
             type="submit"
-            className="w-full sm:w-auto px-10 py-5 bg-slate-900 text-white font-black tracking-widest rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-transform shadow-2xl"
+            disabled={loading}
+            className="w-full sm:w-auto px-10 py-4 bg-slate-900 text-white font-black rounded-xl tracking-widest text-sm shadow-2xl disabled:opacity-50 disabled:cursor-not-allowed transition-all"
           >
-            PROCEED TO PAY
+            {loading ? 'PROCESSING...' : 'PROCEED TO PAY'}
           </button>
         </div>
       </form>

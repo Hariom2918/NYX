@@ -1,8 +1,14 @@
+import type { Metadata } from 'next';
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import TicketSelection from "@/components/ticket-selection";
 import { notFound } from "next/navigation";
 import { AuroraBackground } from "@/components/ui/aurora-background";
 import { formatShortDate } from "@/lib/utils";
+
+export const metadata: Metadata = {
+  title: 'Get Tickets — Nyx After Dark',
+  description: 'Choose your experience. General admission or VIP — secure your spot for Nyx After Dark.',
+};
 
 // Opt out of caching so ticket availability is always fresh
 export const revalidate = 0;

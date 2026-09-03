@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
+import { Analytics } from '@vercel/analytics/next';
 import "./globals.css";
 
 const inter = Inter({
@@ -21,6 +22,11 @@ export const metadata: Metadata = {
     description:
       "An exclusive night of music, art, and immersive experiences.",
     type: "website",
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'Nyx After Dark — 27 Oct 2026' }],
+  },
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
   },
 };
 
@@ -35,6 +41,7 @@ export default function RootLayout({
         className={`${inter.variable} ${outfit.variable} antialiased bg-black text-white min-h-screen`}
       >
         {children}
+        <Analytics />
       </body>
     </html>
   );

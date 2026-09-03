@@ -3,6 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { AuroraBackground } from "./ui/aurora-background";
 
 // ==========================================
@@ -25,7 +26,7 @@ export function HeroCinematic() {
             A New Horizon of Sound
           </motion.div>
           
-          <h1 className="text-7xl md:text-9xl font-display font-extrabold tracking-tighter text-slate-900 drop-shadow-lg mix-blend-overlay">
+          <h1 className="text-5xl md:text-9xl font-display font-extrabold tracking-tighter text-slate-900 drop-shadow-lg mix-blend-overlay">
             NYX AFTER DARK
           </h1>
           
@@ -119,11 +120,7 @@ export function ExperienceSection() {
             >
               {/* Background Image */}
               <div className="absolute inset-0 z-0">
-                <img 
-                  src={card.img} 
-                  alt={card.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                />
+                <Image src={card.img} alt={card.title} fill className="object-cover transition-transform duration-700 group-hover:scale-110" sizes="(max-width: 768px) 300px, 400px" />
                 {/* Gradient Overlay for text legibility */}
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
@@ -210,11 +207,7 @@ export function VenueSection() {
   return (
     <section className="py-32 bg-[#7198B8] px-4 relative overflow-hidden border-t border-white/10">
       <div className="absolute inset-0 z-0">
-        <img 
-          src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=2000&auto=format&fit=crop" 
-          alt="Venue"
-          className="absolute inset-0 w-full h-full object-cover opacity-20 mix-blend-overlay grayscale"
-        />
+        <Image src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=2000&auto=format&fit=crop" alt="Concert venue atmosphere" fill className="object-cover opacity-20 mix-blend-overlay grayscale" sizes="100vw" />
       </div>
 
       <div className="max-w-4xl mx-auto relative z-10">
@@ -248,7 +241,7 @@ export function FinalCTA() {
           viewport={{ once: true }}
           className="relative z-10 max-w-5xl mx-auto flex flex-col items-center px-4"
         >
-          <h2 className="text-6xl md:text-8xl font-display font-extrabold text-slate-900 tracking-tighter mb-10 leading-tight drop-shadow-2xl">
+          <h2 className="text-4xl md:text-8xl font-display font-extrabold text-slate-900 tracking-tighter mb-10 leading-tight drop-shadow-2xl">
             YOU&apos;RE NOT GOING TO WANT TO HEAR ABOUT THIS TOMORROW.
           </h2>
           <Link href="/tickets">

@@ -1,9 +1,15 @@
+import type { Metadata } from 'next';
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { renderQrDataUrl } from "@/lib/qr";
 import Link from "next/link";
 import { formatCurrency } from "@/lib/utils";
 import { PaymentPoller } from "@/components/payment-poller";
 import { AuroraBackground } from "@/components/ui/aurora-background";
+
+export const metadata: Metadata = {
+  title: 'Booking Confirmed — Nyx After Dark',
+  description: 'Your tickets are confirmed. Check your email for QR codes.',
+};
 
 // Server component fetching the order and displaying tickets
 export default async function ConfirmationPage({
@@ -77,6 +83,22 @@ export default async function ConfirmationPage({
                 Your payment of <strong className="text-slate-900 bg-white/50 px-2 py-1 rounded-md">{formatCurrency(order.amount)}</strong> was successful. 
                 Your tickets have also been sent to <strong className="text-slate-900">{order.buyer_email}</strong>.
               </p>
+
+              <div className="mt-8 space-y-3 text-sm text-slate-600">
+                <p className="font-bold text-slate-800 uppercase tracking-widest text-xs">Event Details</p>
+                <p>📅 {order.events?.event_date ? new Date(order.events.event_date).toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : '27 October 2026'}</p>
+                <p>📍 {order.events?.venue || 'The Grand Ballroom'}</p>
+                <p>🕖 7:00 PM onwards</p>
+              </div>
+
+              <div className="mt-6 p-4 bg-white/40 rounded-2xl border border-white/60">
+                <p className="text-slate-800 font-bold text-sm mb-2">What&apos;s Next?</p>
+                <ul className="text-slate-700 text-sm space-y-1">
+                  <li>✉️ Check your email ({order.buyer_email}) for your ticket(s) with QR code.</li>
+                  <li>📱 Show the QR code at the entrance on the day of the event.</li>
+                  <li>🎫 Booking Reference: <span className="font-mono font-bold text-slate-900">{order.id.slice(0, 8).toUpperCase()}</span></li>
+                </ul>
+              </div>
             </>
           )}
         </div>
@@ -108,6 +130,12 @@ export default async function ConfirmationPage({
                   </div>
                 </div>
               ))}
+            </div>
+
+            <div className="text-center mt-12">
+              <Link href="/" className="text-slate-800 hover:text-slate-600 font-bold text-sm tracking-widest uppercase transition-colors">
+                ← Back to Home
+              </Link>
             </div>
           </div>
         )}
